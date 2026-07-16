@@ -8,7 +8,9 @@ Dashboards give you high-level insights into your [trace](/langsmith/observabili
 LangSmith offers two dashboard types:
 
 - **Prebuilt dashboards**: Automatically generated for every tracing project.
-- **Custom dashboards**: Fully configurable collections of charts tailored to your needs.
+- **Custom dashboards**: Collections of charts you can configure to your needs. Two experiences are available depending on your [platform setup](/langsmith/platform-setup):
+    - [**Custom dashboards**](#custom-dashboards): Available for LangSmith Cloud US.
+    - [**Custom dashboards (legacy)**](#custom-dashboards-legacy): Available for LangSmith Self-hosted and LangSmith Cloud EU/APAC.
 
 ## Prebuilt dashboards
 
@@ -34,6 +36,79 @@ You can use group by [run tag or metadata](/langsmith/add-metadata-tags) to spli
 <Note>When adding metadata to runs, we recommend having the same metadata on the trace, as well as the specific run (e.g., LLM call). Metadata and tags are not propagated from parent to child runs, or vice versa. If you want to see both trace charts and LLM call charts grouped by a metadata key, both traces (root runs) and LLM runs need that [metadata attached](/langsmith/add-metadata-tags).</Note>
 
 ## Custom dashboards
+
+<Note>Available for LangSmith Cloud US.</Note>
+
+Create tailored collections of charts for tracking metrics that matter most for your application.
+
+### Create a new dashboard
+
+1. Navigate to the **Monitoring** tab in the left sidebar.
+1. Click on the **+ New Dashboard** button.
+1. Give your dashboard a name and a description.
+1. Click on **Create**.
+
+### Add charts to your dashboard
+
+1. Within a dashboard, click the **+ New Chart** button to open the chart creation pane.
+1. Give your chart a name and description using the **Edit** icon at the top of the pane.
+
+### Chart configuration
+
+#### Start from a template (Optional)
+
+To start from a template, select one of the templates, which include some common observability use cases:
+
+- Error rate over time
+- Average latency by model
+- Run volume
+- Token usage over time
+- Most expensive models
+
+Alternatively, use **Search templates** to find another template.
+
+#### Choose a tracing project or dataset
+
+Open the source picker and use the unified search **Select project or dataset** to find sources. Switch between the two source types with the tabs at the top of the popover.
+
+- **Tracing projects**: add one or multiple as needed per chart. Metrics are computed across the union of runs in every selected project.
+- **Datasets**: pick a single dataset per chart.
+  - Selecting a second dataset silently replaces the previous one.
+  - A chart is either tracing-project-backed or dataset-backed — never both. Picking a dataset while projects are selected (or vice versa) clears the existing selection.
+  - No dataset chart templates exist yet. The **Start from a template** gallery only targets tracing projects, so dataset-backed charts must be built from scratch.
+
+#### Pick a metric
+
+- Choose a metric from the dropdown menu to set the y-axis of your chart.
+- LangSmith supports comparing multiple metrics with the same unit. For example, you may want one chart where you can see prompt tokens and completion tokens. Each metric appears as a separate line.
+
+#### Split the data
+
+There are two ways to create multiple series in a chart (i.e., create multiple lines in a chart):
+
+1. **Group by**: Group runs by [run tag or metadata](/langsmith/add-metadata-tags), run name, or run type. Group by automatically splits the data into multiple series based on the field selected. Group by defaults to the top 5 elements by frequency, configurable up to 20.
+1. **Data series**: Manually define multiple series with individual filters. This is useful for comparing granular data within a single metric.
+
+#### Choose visualization
+
+Choose a visualization type:
+
+- Line
+- Stacked bar
+- KPI
+- Ranked bar
+- Donut
+- Table
+
+### Save and manage charts
+
+- Click **Save** to save your chart to the dashboard.
+- Edit or delete a chart by clicking the triple dot button in the top right of the chart.
+- Clone a chart by clicking the triple line button in the top right of the chart and selecting **+ Clone**. This will open a new chart creation pane with the same configurations as the original.
+
+## Custom dashboards (legacy)
+
+<Note>Available for LangSmith self-hosted deployments and LangSmith Cloud EU/APAC customers.</Note>
 
 Create tailored collections of charts for tracking metrics that matter most for your application.
 

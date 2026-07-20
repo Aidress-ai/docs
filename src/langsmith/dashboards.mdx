@@ -37,7 +37,7 @@ You can use group by [run tag or metadata](/langsmith/add-metadata-tags) to spli
 
 ## Custom dashboards
 
-<Note>Available for LangSmith Cloud US.</Note>
+<Note>Available for LangSmith [Cloud](/langsmith/cloud) US.</Note>
 
 Create tailored collections of charts for tracking metrics that matter most for your application.
 
@@ -71,7 +71,7 @@ Alternatively, use **Search templates** to find another template.
 
 Open **+ Select project or dataset** to find sources. Switch between the two source types with the tabs at the top of the popover.
 
-- **Tracing projects**: add one or multiple as needed per chart. Metrics are computed by pooling runs across every selected project into a single set, not shown per project. To break out results per project, use [Group by](#split-the-data).
+- **Tracing projects**: add one or multiple as needed per chart. Metrics are computed by pooling runs across every selected project into a single set, not shown per project. To break out results per project, use [Group by](#filter-and-group).
 - **Datasets**: pick a single dataset per chart.
   - Selecting a second dataset silently replaces the previous one.
   - A chart is either tracing-project-backed or dataset-backed. Picking a dataset while projects are selected (or vice versa) clears the existing selection.
@@ -90,31 +90,34 @@ Choose a metric from the dropdown. Options are grouped by what you are measuring
 | Feedback score | Select a feedback key. | Average, Minimum, Maximum |
 | Ratio | Define a numerator and denominator, each a metric with its own filter. Useful for error rate, LLM run share, etc. | — |
 
-#### Split the data
+For filtering with multiple metrics, read the following [Filter and group](#filter-and-group) section.
 
-Create multiple series on the same chart in one of two ways:
+#### Filter and group
+
+Refine what data appears on the chart with filters, and split it into multiple series with a group.
+
+Where **filters** appear depends on how many metrics your chart has:
+
+- **Single metric**: one **+ Filter** in the **Filter & group** panel (the `where` slot). It applies to that metric.
+- **Multiple metrics or a ratio**: each metric (or ratio) gets its own **+ Filter** inline in its card under **Pick a metric**. There is no separate chart-wide filter.
+
+When you add a filter, it defaults to filtering at the [run](/langsmith/observability-concepts#runs) level. To broaden the scope, open the filter picker, then the **Advanced** submenu at the bottom, and choose:
+
+- **Trace filter**: filters at the [trace](/langsmith/observability-concepts#traces) (root-run) level.
+- **Tree filter**: includes the entire trace tree if any run in it matches the condition.
+
+The active scope appears as a suffix on the **Advanced** item (for example, **Advanced Tree Filter**). Click the **X** next to it to reset back to a plain run filter.
+
+Dataset sources do not expose run/trace/tree filters. Data is scoped by the selected dataset. For filter syntax, refer to [filtering traces in application](/langsmith/filter-traces-in-application).
+
+**Grouping** creates multiple series on the same chart in one of two ways:
 
 1. **Group by**: Automatically splits data into series based on one attribute. Available attributes: Run Name, Run Type, Tag, Project, [Metadata](/langsmith/add-metadata-tags) (with a path such as `metadata.ls_model_name`), and Feedback Label. Groups are ranked by frequency and capped at the top 20.
 1. **Data series**: Manually add metrics with the **Add another metric** button. Each series can carry its own filter, so you can compare, for example, "count where status is error" against "count where status is success" on the same chart.
 
 <Note>
-  Group by and multi-metric are mutually exclusive on a single chart. Only one group-by attribute is allowed. Donut, ranked bar, and table charts do not support multiple data series (extras are dropped or blocked).
+Group by and multi-metric are mutually exclusive on a single chart. Only one group-by attribute is allowed. Donut, ranked bar, and table charts do not support multiple data series (extras are dropped or blocked).
 </Note>
-
-#### Filter runs
-
-Filters apply at two levels:
-
-- **Chart filter**: applies to every series on the chart. Configured once at the top of the chart form.
-- **Series filter**: applies only to the metric it is attached to. Configured inline with each series (used for the numerator and denominator of ratio metrics, or when comparing e.g. errors vs. successes across two series).
-
-Tracing project sources support three filter types:
-
-- **Run filter**: filters at the run level.
-- **Trace filter**: filters at the trace (root-run) level.
-- **Tree filter**: includes the entire trace tree if any run in it matches.
-
-Dataset sources do not expose run/trace/tree filters. Data is scoped by the selected dataset. For filter syntax, see [filtering traces in application](/langsmith/filter-traces-in-application).
 
 #### Choose visualization
 
@@ -133,9 +136,17 @@ Choose a visualization type:
 - Edit or delete a chart by clicking the triple dot button in the top right of the chart.
 - Clone a chart by clicking the triple line button in the top right of the chart and selecting **+ Clone**. This will open a new chart creation pane with the same configurations as the original.
 
+### Arrange your dashboard
+
+- **Reorder charts**: drag any chart by its header to move it in the grid.
+- **Resize charts**: hover any edge or corner of a chart. Horizontal handles widen/narrow, vertical handles change height, corners resize both at once. Layout is saved automatically.
+- **Dashboard time range**: set once at the top of the dashboard. Every chart uses this range unless it overrides its own bucket size.
+- **Cross-chart hover**: hovering over a timestamp on any time-series chart draws a synced crosshair across every other time-series chart in the dashboard, so you can find the same instant across multiple metrics.
+- **Clone a dashboard**: use the copy icon in the dashboard header. Cloning a [prebuilt dashboard](#prebuilt-dashboards) converts its charts into fully editable custom charts.
+
 ## Custom dashboards (legacy)
 
-<Note>Available for LangSmith self-hosted deployments and LangSmith Cloud EU/APAC customers.</Note>
+<Note>Available for LangSmith [Self-hosted](/langsmith/self-hosted) and LangSmith [Cloud](/langsmith/cloud) EU/APAC customers.</Note>
 
 Create tailored collections of charts for tracking metrics that matter most for your application.
 

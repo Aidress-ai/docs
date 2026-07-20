@@ -247,11 +247,12 @@ Auto upgrades can have an impact on your bill. Please read this section carefull
 
 When you use certain features with `base` tier traces, their data retention will be automatically upgraded to `extended` tier. This will increase both the retention period, and the cost of the trace.
 
-The complete list of scenarios in which a trace will upgrade when:
+A base-tier trace upgrades to extended retention in the following scenarios:
 
-* **Feedback** is added to any run on the trace (or any trace in the thread), whether through [manual annotation](/langsmith/annotate-traces-inline), automatically with [an online evaluator](/langsmith/online-evaluations-llm-as-judge), or programmatically [via the SDK](/langsmith/attach-user-feedback).
-* An **[annotation queue](/langsmith/annotation-queues#assign-runs-to-a-single-run-queue)** receives any run from the trace.
-* An **[automation rule](/langsmith/rules#create-a-rule)** matches any run within a trace.
+* **Feedback** is added programmatically to any run on the trace (or any trace in the thread) [via the SDK](/langsmith/attach-user-feedback). Feedback and reviewer notes added from the LangSmith UI do not upgrade retention.
+* An **[online evaluator](/langsmith/online-evaluations-llm-as-judge)** scores the trace, unless you opt out of extending retention in the evaluator settings. For more information, see [Manage evaluator trace retention](/langsmith/evaluators#manage-evaluator-trace-retention).
+* An **[annotation queue](/langsmith/annotation-queues#assign-runs-to-a-single-run-queue)** receives a run from the trace, unless the request sets `extend_trace_retention=false`.
+* An **[automation rule](/langsmith/rules#create-a-rule)** matches a run within the trace and its action is configured to extend retention.
 
 **Why auto-upgrade traces?**
 
@@ -264,7 +265,7 @@ If you have questions or concerns about our pricing model, please feel free to c
 
 **How does data retention affect downstream features?**
 
-* **Annotation Queues, Run Rules, and Feedback**: Traces that use these features will be [auto-upgraded](#data-retention-auto-upgrades).
+* **Annotation queues, automation rules, and feedback**: These features can [auto-upgrade traces](#data-retention-auto-upgrades), depending on how you configure or invoke them.
 * **Monitoring**: The monitoring tab will continue to work even after a base tier trace's data retention period ends. It is powered by trace metadata that exists for >30 days, meaning that your monitoring graphs will continue to stay accurate even on `base` tier traces.
 * **Datasets**: Datasets have an indefinite data retention period. Restated differently, if you add a trace's inputs and outputs to a dataset, they will never be deleted. We suggest that if you are using LangSmith for data collection, you take advantage of the datasets feature.
 

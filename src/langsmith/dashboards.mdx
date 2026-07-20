@@ -71,23 +71,50 @@ Alternatively, use **Search templates** to find another template.
 
 Open **+ Select project or dataset** to find sources. Switch between the two source types with the tabs at the top of the popover.
 
-- **Tracing projects**: add one or multiple as needed per chart. Metrics are computed across the union of runs in every selected project.
+- **Tracing projects**: add one or multiple as needed per chart. Metrics are computed by pooling runs across every selected project into a single set, not shown per project. To break out results per project, use [Group by](#split-the-data).
 - **Datasets**: pick a single dataset per chart.
   - Selecting a second dataset silently replaces the previous one.
-  - A chart is either tracing-project-backed or dataset-backed — never both. Picking a dataset while projects are selected (or vice versa) clears the existing selection.
-  - No dataset chart templates exist yet. The **Start from a template** gallery only targets tracing projects, so dataset-backed charts must be built from scratch.
+  - A chart is either tracing-project-backed or dataset-backed. Picking a dataset while projects are selected (or vice versa) clears the existing selection.
 
 #### Pick a metric
 
-- Choose a metric from the dropdown menu to set the y-axis of your chart.
-- LangSmith supports comparing multiple metrics with the same unit. For example, you may want one chart where you can see prompt tokens and completion tokens. Each metric appears as a separate line.
+Choose a metric from the dropdown. Options are grouped by what you are measuring:
+
+| Metric | Description | Aggregations |
+| :----- | :---------- | :----------- |
+| Count | Number of runs. | — |
+| Latency | Aggregates over `latency_seconds`. | Average, Percentile (p50 or p99) |
+| Time to first token | Aggregates over `first_token_seconds`. | Percentile (p50 or p99), Average |
+| Tokens | Choose Total, Input, or Output tokens. | Sum, Average, Percentile |
+| Cost | Choose Total, Input, or Output cost. | Sum, Average, Percentile |
+| Feedback score | Select a feedback key. | Average, Minimum, Maximum |
+| Ratio | Define a numerator and denominator, each a metric with its own filter. Useful for error rate, LLM run share, etc. | — |
 
 #### Split the data
 
-There are two ways to create multiple series in a chart (i.e., create multiple lines in a chart):
+Create multiple series on the same chart in one of two ways:
 
-1. **Group by**: Group runs by [run tag or metadata](/langsmith/add-metadata-tags), run name, or run type. Group by automatically splits the data into multiple series based on the field selected. Group by defaults to the top 5 elements by frequency, configurable up to 20.
-1. **Data series**: Manually define multiple series with individual filters. This is useful for comparing granular data within a single metric.
+1. **Group by**: Automatically splits data into series based on one attribute. Available attributes: Run Name, Run Type, Tag, Project, [Metadata](/langsmith/add-metadata-tags) (with a path such as `metadata.ls_model_name`), and Feedback Label. Groups are ranked by frequency and capped at the top 20.
+1. **Data series**: Manually add metrics with the **Add another metric** button. Each series can carry its own filter, so you can compare, for example, "count where status is error" against "count where status is success" on the same chart.
+
+<Note>
+  Group by and multi-metric are mutually exclusive on a single chart. Only one group-by attribute is allowed. Donut, ranked bar, and table charts do not support multiple data series (extras are dropped or blocked).
+</Note>
+
+#### Filter runs
+
+Filters apply at two levels:
+
+- **Chart filter**: applies to every series on the chart. Configured once at the top of the chart form.
+- **Series filter**: applies only to the metric it is attached to. Configured inline with each series (used for the numerator and denominator of ratio metrics, or when comparing e.g. errors vs. successes across two series).
+
+Tracing project sources support three filter types:
+
+- **Run filter**: filters at the run level.
+- **Trace filter**: filters at the trace (root-run) level.
+- **Tree filter**: includes the entire trace tree if any run in it matches.
+
+Dataset sources do not expose run/trace/tree filters. Data is scoped by the selected dataset. For filter syntax, see [filtering traces in application](/langsmith/filter-traces-in-application).
 
 #### Choose visualization
 
